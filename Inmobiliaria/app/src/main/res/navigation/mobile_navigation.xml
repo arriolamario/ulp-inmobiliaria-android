@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/inicioFragment">
+    <fragment
+        android:id="@+id/inicioFragment"
+        android:name="com.arriola.inmobiliaria.ui.menu.ui.inicio.InicioFragment"
+        android:label="fragment_inicio"
+        tools:layout="@layout/fragment_inicio" />
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="com.arriola.inmobiliaria.ui.menu.ui.perfil.PerfilFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_perfil">
+        <action
+            android:id="@+id/action_perfilFragment_to_cambiarClaveFragment"
+            app:destination="@id/cambiarClaveFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inmueblesFragment"
+        android:name="com.arriola.inmobiliaria.ui.menu.ui.inmueble.InmueblesFragment"
+        android:label="fragment_inmuebles"
+        tools:layout="@layout/fragment_inmuebles" />
+    <fragment
+        android:id="@+id/inquilinosFragment"
+        android:name="com.arriola.inmobiliaria.ui.menu.ui.inquilino.InquilinosFragment"
+        android:label="fragment_inquilinos"
+        tools:layout="@layout/fragment_inquilinos" />
+    <fragment
+        android:id="@+id/contratoFragment"
+        android:name="com.arriola.inmobiliaria.ui.menu.ui.contrato.ContratoFragment"
+        android:label="fragment_contrato"
+        tools:layout="@layout/fragment_contrato" />
+    <fragment
+        android:id="@+id/cambiarClaveFragment"
+        android:name="com.arriola.inmobiliaria.ui.menu.ui.cambiarclave.CambiarClaveFragment"
+        android:label="fragment_cambiar_clave"
+        tools:layout="@layout/fragment_cambiar_clave" >
+        <action
+            android:id="@+id/action_cambiarClaveFragment_to_perfilFragment"
+            app:destination="@id/perfilFragment" />
+    </fragment>
+</navigation>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4169E1</color> <!-- Azul Real -->
+    <color name="colorPrimaryDark">#00008B</color> <!-- Azul Oscuro -->
+    <color name="colorAccent">#40E0D0</color> <!-- Azul Turquesa -->
+    <color name="colorSecondary">#5F9EA0</color> <!-- Azul Cadete -->
+</resources>
