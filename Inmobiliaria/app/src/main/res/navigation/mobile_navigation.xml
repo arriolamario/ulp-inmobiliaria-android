@@ -22,7 +22,11 @@
         android:id="@+id/inmueblesFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.inmueble.InmueblesFragment"
         android:label="fragment_inmuebles"
-        tools:layout="@layout/fragment_inmuebles" />
+        tools:layout="@layout/fragment_inmuebles" >
+        <action
+            android:id="@+id/action_inmueblesFragment_to_agregarInmuebleFragment"
+            app:destination="@id/agregarInmuebleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/inquilinosFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.inquilino.InquilinosFragment"
@@ -41,5 +45,14 @@
         <action
             android:id="@+id/action_cambiarClaveFragment_to_perfilFragment"
             app:destination="@id/perfilFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/agregarInmuebleFragment"
+        android:name="com.arriola.inmobiliaria.ui.menu.ui.inmueble.AgregarInmuebleFragment"
+        android:label="fragment_agregar_inmueble"
+        tools:layout="@layout/fragment_agregar_inmueble" >
+        <action
+            android:id="@+id/action_agregarInmuebleFragment_to_inmueblesFragment"
+            app:destination="@id/inmueblesFragment" />
     </fragment>
 </navigation>

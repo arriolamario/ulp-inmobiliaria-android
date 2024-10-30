@@ -4,9 +4,16 @@ public class Inmueble {
     private int id;
     private String direccion;
     private int idTipoUso;
-    private Uso uso;
+    private Tipo uso;
     private int idTipo;
     private Tipo tipo;
+    private String avatar_Url;
+    private float precio;
+    private int ambientes;
+    private boolean activo;
+
+    public Inmueble() {
+    }
 
     // Getters and setters
 
@@ -34,11 +41,11 @@ public class Inmueble {
         this.idTipoUso = idTipoUso;
     }
 
-    public Uso getUso() {
+    public Tipo getUso() {
         return uso;
     }
 
-    public void setUso(Uso uso) {
+    public void setUso(Tipo uso) {
         this.uso = uso;
     }
 
@@ -56,5 +63,37 @@ public class Inmueble {
 
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
+    }
+
+    public String getAvatar_Url() {
+        return avatar_Url;
+    }
+
+    public void setAvatar_Url(String avatar_Url) {
+        this.avatar_Url = avatar_Url;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+
+    public int getAmbientes() {
+        return ambientes;
+    }
+
+    public void setAmbientes(int ambientes) {
+        this.ambientes = ambientes;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }

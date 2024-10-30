@@ -5,7 +5,8 @@
     android:id="@+id/inicioFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.menu.ui.inicio.InicioFragment">
+    tools:context=".ui.menu.ui.inicio.InicioFragment"
+    android:background="#FF0000">
 
     <TextView
         android:id="@+id/textView3"

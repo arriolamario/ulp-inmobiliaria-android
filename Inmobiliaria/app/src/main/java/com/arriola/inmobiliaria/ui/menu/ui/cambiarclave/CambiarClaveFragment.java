@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +18,6 @@ import com.arriola.inmobiliaria.databinding.FragmentCambiarClaveBinding;
 import com.arriola.inmobiliaria.databinding.FragmentPerfilBinding;
 import com.arriola.inmobiliaria.ui.menu.ui.perfil.PerfilFragmentViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CambiarClaveFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CambiarClaveFragment extends Fragment {
     private FragmentCambiarClaveBinding bind;
     private CambiarClaveFragmentViewModel vm;
@@ -39,6 +36,13 @@ public class CambiarClaveFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 vm.CambiarClave(bind.etCambiarClave.getText().toString());
+            }
+        });
+
+        vm.getmCambiarClave().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                Navigation.findNavController(container).navigate(R.id.action_cambiarClaveFragment_to_perfilFragment);
             }
         });
         return root;

@@ -21,6 +21,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.arriola.inmobiliaria.Util;
 import com.arriola.inmobiliaria.model.Propietario;
 import com.arriola.inmobiliaria.model.ResponseApi;
 import com.arriola.inmobiliaria.request.ApiClient;
@@ -158,12 +159,12 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
                 context.getContentResolver().takePersistableUriPermission (fotoPerfilUri, Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
 
-            Bitmap imagenBitmap = redimensionarImagenDesdeUri(context, fotoPerfilUri, 800);
+            Bitmap imagenBitmap = Util.redimensionarImagenDesdeUri(context, fotoPerfilUri, 800);
 
             bitmapMutableLiveData.setValue(imagenBitmap);
 
             String tipoMime = context.getContentResolver().getType(fotoPerfilUri);
-            File fileImagen = convertirBitmapAFile(imagenBitmap, context, tipoMime);
+            File fileImagen = Util.convertirBitmapAFile(imagenBitmap, context, tipoMime);
 
             // Crear RequestBody para el archivo
             RequestBody requestFile = RequestBody.create(MediaType.parse(tipoMime), fileImagen);
@@ -197,89 +198,5 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
         }
     }
 
-    private Bitmap redimensionarImagenDesdeUri(Context context, Uri uri, int nuevoAncho) {
-        try {
-            //Obtenemos el bitmap desde la URI
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            Bitmap bitmapOriginal = BitmapFactory.decodeStream(inputStream);
-            
-            //Redimencionamos
-            int anchoOriginal = bitmapOriginal.getWidth();
-            int alturaOriginal = bitmapOriginal.getHeight();
 
-            int nuevaAltura = (int) ((double) alturaOriginal / anchoOriginal * nuevoAncho);
-
-            bitmapOriginal = Bitmap.createScaledBitmap(bitmapOriginal, nuevoAncho, nuevaAltura, true);
-
-            int orientacion = obtenerOrientacionExif(context, uri);
-            bitmapOriginal = rotarImagenSegunExif(bitmapOriginal, orientacion);
-            
-            return bitmapOriginal;
-        } catch (FileNotFoundException e) {
-            Log.e("FILE-OPEN", e.getMessage());
-            return null;
-        }
-    }
-
-    private int obtenerOrientacionExif(Context context, Uri uri) {
-        try {
-            InputStream input = context.getContentResolver().openInputStream(uri);
-            ExifInterface exif = new ExifInterface(input);
-
-            int orientacion = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            input.close();
-            return orientacion;
-        } catch (IOException e) {
-            return ExifInterface.ORIENTATION_UNDEFINED;
-        }
-    }
-
-    private Bitmap rotarImagenSegunExif(Bitmap bitmap, int orientacionExif) {
-        Matrix matrix = new Matrix();
-
-        switch (orientacionExif) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                matrix.postRotate(90);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                matrix.postRotate(180);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                matrix.postRotate(270);
-                break;
-            default:
-                return bitmap; // No se necesita rotar
-        }
-
-        // Crear un nuevo bitmap con la rotación aplicada
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    }
-
-    public File convertirBitmapAFile(Bitmap bitmap, Context context, String tipoMime) {
-        // Crear un archivo temporal
-        String nombreFile = "nombreFile.jpeg";
-        if(tipoMime == "image/jpeg")
-            nombreFile = "imagen_temp.jpeg";
-        else if(tipoMime == "image/png")
-            nombreFile = "imagen_temp.png";
-        File file = new File(context.getCacheDir(), nombreFile);
-        try{
-            file.createNewFile();
-            // Convertir Bitmap a un byte array
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos); // Puedes cambiar a JPEG si prefieres
-            byte[] bitmapData = bos.toByteArray();
-
-            // Escribir el byte array a un archivo
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bitmapData);
-            fos.flush();
-            fos.close();
-        }
-        catch (Exception ex){
-
-        }
-
-        return file;
-    }
 }

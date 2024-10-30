@@ -1,64 +1,195 @@
-package com.arriola.inmobiliaria;
+package com.arriola.inmobiliaria.ui.menu.ui.inmueble;
 
+import static android.content.Intent.getIntent;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link agregarInmuebleFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class agregarInmuebleFragment extends Fragment {
+import com.arriola.inmobiliaria.R;
+import com.arriola.inmobiliaria.databinding.FragmentAgregarInmuebleBinding;
+import com.arriola.inmobiliaria.databinding.FragmentInmueblesBinding;
+import com.arriola.inmobiliaria.model.inmueble.Inmueble;
+import com.arriola.inmobiliaria.model.inmueble.Tipo;
+import com.arriola.inmobiliaria.model.inmueble.TiposApi;
+import com.arriola.inmobiliaria.request.ApiClient;
+import com.bumptech.glide.Glide;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class AgregarInmuebleFragment extends Fragment {
 
-    public agregarInmuebleFragment() {
+    private FragmentAgregarInmuebleBinding bind;
+    private AgregarInmuebleFragmentViewModel vm;
+    private int idInmueble;
+    private TiposApi.TiposData tipos;
+    private Intent intent;
+    private ActivityResultLauncher<Intent> arl;
+    private ArrayAdapter<Tipo> adapterTipo;
+    private ArrayAdapter<Tipo> adapterUso;
+    public AgregarInmuebleFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment agregarInmuebleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static agregarInmuebleFragment newInstance(String param1, String param2) {
-        agregarInmuebleFragment fragment = new agregarInmuebleFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        bind = FragmentAgregarInmuebleBinding.inflate(inflater, container, false);
+        vm = new ViewModelProvider(this).get(AgregarInmuebleFragmentViewModel.class);
+
+        abrirGaleria();
+        idInmueble =  getArguments().getInt("idInmueble");
+
+        vm.getmAgregarInmueble().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                bind.btnAccionAgregarInmueble.setText("CARGAR");
+                bind.swActivoAgregarInmueble.setVisibility(View.INVISIBLE);
+                bind.swActivoAgregarInmueble.setChecked(true);
+                bind.ivfotoAgregarInmueble.setImageResource(R.drawable.agente_inmobiliario);
+            }
+        });
+        vm.getmTipos().observe(getViewLifecycleOwner(), new Observer<TiposApi.TiposData>() {
+            @Override
+            public void onChanged(TiposApi.TiposData tiposData) {
+                tipos = tiposData;
+
+                adapterTipo = new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tipos.getTipo());
+                bind.spTipoAgregarInmueble.setAdapter(adapterTipo);
+
+                adapterUso = new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tipos.getUso());
+                bind.spUsoAgregarInmueble.setAdapter(adapterUso);
+                vm.getInmueble();
+            }
+        });
+        vm.getmBitmap().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
+            @Override
+            public void onChanged(Bitmap bitmap) {
+                bind.ivfotoAgregarInmueble.setImageBitmap(bitmap);
+            }
+        });
+        vm.getmCrearInmueble().observe(getViewLifecycleOwner(), new Observer() {
+            @Override
+            public void onChanged(Object o) {
+                Navigation.findNavController(container).navigate(R.id.action_agregarInmuebleFragment_to_inmueblesFragment);
+            }
+        });
+
+        vm.getmActualizarInmueble().observe(getViewLifecycleOwner(), new Observer() {
+            @Override
+            public void onChanged(Object o) {
+                bind.btnAccionAgregarInmueble.setText("ACTUALIZAR");
+                bind.swActivoAgregarInmueble.setVisibility(View.VISIBLE);
+
+                bind.etDireccionAgregarInmueble.setFocusable(false);
+                bind.etDireccionAgregarInmueble.setEnabled(false);
+                bind.etDireccionAgregarInmueble.setFocusableInTouchMode(false);
+                bind.etDireccionAgregarInmueble.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                bind.etAmbientesAgregarInmueble.setFocusable(false);
+                bind.etAmbientesAgregarInmueble.setEnabled(false);
+                bind.etAmbientesAgregarInmueble.setFocusableInTouchMode(false);
+                bind.etAmbientesAgregarInmueble.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                bind.etPrecioAgregarInmueble.setFocusable(false);
+                bind.etPrecioAgregarInmueble.setEnabled(false);
+                bind.etPrecioAgregarInmueble.setFocusableInTouchMode(false);
+                bind.etPrecioAgregarInmueble.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                bind.spTipoAgregarInmueble.setFocusable(false);
+                bind.spTipoAgregarInmueble.setEnabled(false);
+                bind.spTipoAgregarInmueble.setFocusableInTouchMode(false);
+
+                bind.spUsoAgregarInmueble.setFocusable(false);
+                bind.spUsoAgregarInmueble.setEnabled(false);
+                bind.spUsoAgregarInmueble.setFocusableInTouchMode(false);
+
+            }
+        });
+        vm.getmGetInmueble().observe(getViewLifecycleOwner(), new Observer<Inmueble>() {
+            @Override
+            public void onChanged(Inmueble inmueble) {
+                Glide.with(getContext())
+                        .load(ApiClient.URLBASE + inmueble.getAvatar_Url())
+                        .placeholder(R.drawable.agente_inmobiliario)
+                        .error(R.drawable.agente_inmobiliario)
+                        .into(bind.ivfotoAgregarInmueble);
+
+                bind.etDireccionAgregarInmueble.setText(inmueble.getDireccion());
+                bind.etAmbientesAgregarInmueble.setText(Integer.toString(inmueble.getAmbientes()));
+                bind.etPrecioAgregarInmueble.setText(Float.toString(inmueble.getPrecio()));
+                Tipo t = inmueble.getTipo();
+                int positionTipo = adapterTipo.getPosition(t);
+                bind.spTipoAgregarInmueble.setSelection(positionTipo);
+                int positionUso = adapterUso.getPosition(inmueble.getUso());
+                bind.spUsoAgregarInmueble.setSelection(positionUso);
+                bind.swActivoAgregarInmueble.setChecked(inmueble.isActivo());
+            }
+        });
+        bind.ivfotoAgregarInmueble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                arl.launch(intent);
+            }
+        });
+
+        bind.btnAccionAgregarInmueble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String direccion = bind.etDireccionAgregarInmueble.getText().toString();
+                String ambientes = bind.etAmbientesAgregarInmueble.getText().toString();
+                String precio = bind.etPrecioAgregarInmueble.getText().toString();
+                Tipo tipo = (Tipo) bind.spTipoAgregarInmueble.getSelectedItem();
+                Tipo uso = (Tipo) bind.spUsoAgregarInmueble.getSelectedItem();
+                Bitmap imagenBitmap = ((BitmapDrawable) bind.ivfotoAgregarInmueble.getDrawable()).getBitmap();
+                boolean activo = bind.swActivoAgregarInmueble.isChecked();
+
+                vm.grabar(idInmueble, direccion, ambientes, precio, tipo, uso, imagenBitmap, activo);
+            }
+        });
+        vm.setIdInmueble(idInmueble);
+        vm.getTipos();
+
+
+
+        return bind.getRoot();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        bind = null;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_agregar_inmueble, container, false);
+    private void abrirGaleria(){
+        intent=new Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        arl=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                vm.recibirFoto(result);
+            }
+        });
     }
 }

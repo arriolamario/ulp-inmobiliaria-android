@@ -124,7 +124,7 @@ public class PerfilFragment extends Fragment {
         bind.btCambiarClave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.cambiarClaveFragment);
+                Navigation.findNavController(view).navigate(R.id.action_perfilFragment_to_cambiarClaveFragment);
             }
         });
 

@@ -8,12 +8,16 @@ import com.arriola.inmobiliaria.model.Propietario;
 import com.arriola.inmobiliaria.model.ResponseApi;
 import com.arriola.inmobiliaria.model.Token;
 import com.arriola.inmobiliaria.model.UsuarioToken;
+import com.arriola.inmobiliaria.model.inmueble.InmuebleApi;
+import com.arriola.inmobiliaria.model.inmueble.InmuebleIdApi;
+import com.arriola.inmobiliaria.model.inmueble.TiposApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.Date;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -28,7 +32,9 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public class ApiClient {
     public static final String URLBASE = "http://192.168.1.135:5182/";
@@ -110,5 +116,29 @@ public class ApiClient {
         @Multipart
         @PATCH("api/propietarios/cambiaravatar")
         Call<ResponseApi> cambiarAvatar(@Header("Authorization") String token, @Part MultipartBody.Part avatar);
+
+        @GET("api/inmueble")
+        Call<InmuebleApi> inmuebles(@Header("Authorization") String token);
+
+        @GET("api/tipos")
+        Call<TiposApi> getTipos(@Header("Authorization") String token);
+
+        @Multipart
+        @PUT("api/inmueble")
+        Call<ResponseApi> crearInmueble(@Header("Authorization") String token,
+                                        @Part MultipartBody.Part imagen,
+                                        @Part("Direccion") RequestBody direccion,
+                                        @Part("Ambientes") RequestBody ambientes,
+                                        @Part("Precio") RequestBody precio,
+                                        @Part("IdTipo") RequestBody idTipo,
+                                        @Part("IdUso") RequestBody idUso,
+                                        @Part("Activo") RequestBody activo);
+
+        @GET("api/inmueble/{idInmueble}")
+        Call<InmuebleIdApi> getInmuebleId(@Header("Authorization") String token, @Path("idInmueble") String idInmueble);
+
+        @Multipart
+        @PATCH("api/inmueble/{idInmueble}")
+        Call<ResponseApi> actualizarInmueble(@Header("Authorization") String token, @Part MultipartBody.Part imagen, @Part("Activo") RequestBody activo, @Path("idInmueble") String idInmueble);
     }
 }

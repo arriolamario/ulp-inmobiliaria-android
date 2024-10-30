@@ -8,7 +8,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.Navigation;
 
+import com.arriola.inmobiliaria.R;
 import com.arriola.inmobiliaria.model.ResponseApi;
 import com.arriola.inmobiliaria.request.ApiClient;
 import com.arriola.inmobiliaria.ui.login.MainActivity;
@@ -20,9 +23,17 @@ import retrofit2.Response;
 
 public class CambiarClaveFragmentViewModel extends AndroidViewModel {
     private Context context;
+    private MutableLiveData<Boolean> mCambiarClave;
     public CambiarClaveFragmentViewModel(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
+    }
+
+    public MutableLiveData<Boolean> getmCambiarClave() {
+        if(mCambiarClave == null){
+            mCambiarClave = new MutableLiveData<>();
+        }
+        return mCambiarClave;
     }
 
     public void CambiarClave(String clave){
@@ -36,6 +47,7 @@ public class CambiarClaveFragmentViewModel extends AndroidViewModel {
                 ResponseApi responseApi = response.body();
                 if(response.isSuccessful() && responseApi != null){
                     Toast.makeText(context, "Clave cambiada correctamente", Toast.LENGTH_SHORT).show();
+                    mCambiarClave.postValue(true);
                 }
                 else if(response.code() == 401){
                     Intent intent = new Intent(context, MainActivity.class);
