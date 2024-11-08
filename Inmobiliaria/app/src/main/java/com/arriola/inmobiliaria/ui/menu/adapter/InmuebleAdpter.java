@@ -1,29 +1,27 @@
-package com.arriola.inmobiliaria.ui.menu.ui.inmueble;
+package com.arriola.inmobiliaria.ui.menu.adapter;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.arriola.inmobiliaria.ui.menu.ui.contrato.DetalleContratoFragment;
 import com.arriola.inmobiliaria.R;
 import com.arriola.inmobiliaria.Util;
 import com.arriola.inmobiliaria.databinding.ViewInmuebleItemBinding;
 import com.arriola.inmobiliaria.model.inmueble.Inmueble;
-import com.arriola.inmobiliaria.request.ApiClient;
 import com.arriola.inmobiliaria.ui.menu.ui.inquilino.DetalleInquilinoFragment;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 public class InmuebleAdpter extends RecyclerView.Adapter<InmuebleAdpter.InmuebleViewHolder>{
     public static final int INMUEBLE_DETALLE = 1;
     public static final int INQUILINO_DETALLE = 2;
+    public static final int CONTRATO_DETALLE = 3;
     private ViewInmuebleItemBinding bind;
     private List<Inmueble> inmuebleList;
     private int view;
@@ -85,6 +83,17 @@ public class InmuebleAdpter extends RecyclerView.Adapter<InmuebleAdpter.Inmueble
                         Bundle bundle = new Bundle();
                         bundle.putInt(DetalleInquilinoFragment.IDINQUILINO, inmueble.getIdInquilino());
                         Navigation.findNavController(bind.getRoot()).navigate(R.id.action_inquilinosFragment_to_detalleInquilinoFragment, bundle);
+                    }
+                });
+            }
+            else if(view == CONTRATO_DETALLE)
+            {
+                bind.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(DetalleContratoFragment.IDCONTRATO, inmueble.getIdContrato());
+                        Navigation.findNavController(bind.getRoot()).navigate(R.id.action_contratoFragment_to_detalleContratoFragment, bundle);
                     }
                 });
             }

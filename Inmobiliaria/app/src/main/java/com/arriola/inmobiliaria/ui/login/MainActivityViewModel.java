@@ -28,7 +28,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void entrar(String usuario, String clave){
-        Call<Token> llamada = ApiClient.getApiInmobiliaria().login(new LoginView(usuario, clave));
+        Call<Token> llamada = ApiClient.getApiInmobiliaria(context, false).login(new LoginView(usuario, clave));
 
         llamada.enqueue(new Callback<Token>() {
             @Override
@@ -54,7 +54,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void EnviarMail(String usuario){
         if(usuario != null && !usuario.isEmpty()){
-            Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria().mailRecupero(usuario);
+            Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria(context).mailRecupero(usuario);
 
             responseApiCall.enqueue(new Callback<ResponseApi>() {
                 @Override
@@ -63,13 +63,8 @@ public class MainActivityViewModel extends AndroidViewModel {
                     if(response.isSuccessful() && responseApi != null){
                         Toast.makeText(context, "Email enviado, revise su bandeja de correo.", Toast.LENGTH_SHORT).show();
                     }
-                    else if(response.code() == 401){
-                        Intent intent = new Intent(context, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    }
-                    else{
-                        Toast.makeText(context, "Error onResponse: al envio de email", Toast.LENGTH_SHORT).show();
+                    else if(response.code() != 401){
+                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -82,6 +77,23 @@ public class MainActivityViewModel extends AndroidViewModel {
         else{
 
             Toast.makeText(context, "Ingrese el usuario!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void UsuarioLogeado(){
+        //ApiClient.Borrar(context);
+        Token token = ApiClient.getToken(context);
+        if(token != null){
+            Intent intent = new Intent(context, MenuActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+    }
+
+    public void mensaje(Intent intent) {
+        boolean session = intent.getBooleanExtra("FLAGSESSION", false);
+        if(session){
+            Toast.makeText(context, "Session expirada", Toast.LENGTH_SHORT).show();
         }
     }
 }

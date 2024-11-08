@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arriola.inmobiliaria.R;
+import com.arriola.inmobiliaria.Util;
 import com.arriola.inmobiliaria.databinding.FragmentInicioBinding;
 import com.arriola.inmobiliaria.databinding.FragmentPerfilBinding;
 import com.arriola.inmobiliaria.model.Propietario;
@@ -57,11 +58,7 @@ public class PerfilFragment extends Fragment {
                 bind.etTelefonoNumero.setText(propietario.getTelefonoNumero());
                 bind.ivFotoPerfil.setImageResource(R.drawable.sin_perfil);
 
-                Glide.with(getContext())
-                        .load(ApiClient.URLBASE + propietario.getAvatar_Url())
-                        .placeholder(R.drawable.sin_perfil)
-                        .error(R.drawable.sin_perfil)
-                        .into(bind.ivFotoPerfil);
+                Util.cargarImagen(getContext(), propietario.getAvatar_Url(), R.drawable.sin_perfil, bind.ivFotoPerfil);
             }
         });
 

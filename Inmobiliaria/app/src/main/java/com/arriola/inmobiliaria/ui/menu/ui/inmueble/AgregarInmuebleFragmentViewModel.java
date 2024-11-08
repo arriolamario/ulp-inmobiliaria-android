@@ -104,7 +104,7 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
     }
 
     public void getTipos(){
-        Call<TiposApi> callTipos = ApiClient.getApiInmobiliaria().getTipos(ApiClient.getToken(context).getTokenHeader());
+        Call<TiposApi> callTipos = ApiClient.getApiInmobiliaria(context).getTipos(ApiClient.getToken(context).getTokenHeader());
 
         callTipos.enqueue(new Callback<TiposApi>() {
             @Override
@@ -113,13 +113,7 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
                 if(response.isSuccessful() && tipos != null){
                     mTipos.postValue(tipos.getData());
                 }
-                else if(response.code() == 401){
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
-                else{
-                    Log.d("SALIDA onResponse", response.message());
+                else if(response.code() != 401){
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -138,7 +132,7 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
                 context.getContentResolver().takePersistableUriPermission(imagenInmuebleUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
 
-            Bitmap imagenBitmap = Util.redimensionarImagenDesdeUri(context, imagenInmuebleUri, 800);
+            Bitmap imagenBitmap = Util.redimensionarImagenDesdeUri(context, imagenInmuebleUri, 300);
             mBitmap.setValue(imagenBitmap);
         }
     }
@@ -162,7 +156,7 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
             MultipartBody.Part bodyImagen = MultipartBody.Part.createFormData("imagen", fileImagen.getName(), requestFile);
 
             if(idInmueble == 0) {
-                Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria()
+                Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria(context)
                         .crearInmueble(ApiClient.getToken(context).getTokenHeader(), bodyImagen, direccionPart, ambientesPart, precioPart, idTipoPart, idUsoPart, activoPart);
 
                 responseApiCall.enqueue(new Callback<ResponseApi>() {
@@ -171,12 +165,8 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Toast.makeText(context, "Se creo correctamente el inmueble", Toast.LENGTH_SHORT).show();
                             mCrearInmueble.postValue("");
-                        } else if (response.code() == 401) {
-                            Intent intent = new Intent(context, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                        } else {
-                            Log.d("SALIDA onResponse", response.message());
+                        }
+                        else if(response.code() != 401){
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -188,7 +178,7 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
                 });
             }
             else{
-                Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria().actualizarInmueble(ApiClient.getToken(context).getTokenHeader(), bodyImagen, activoPart, Integer.toString(idInmueble));
+                Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria(context).actualizarInmueble(ApiClient.getToken(context).getTokenHeader(), bodyImagen, activoPart, Integer.toString(idInmueble));
 
                 responseApiCall.enqueue(new Callback<ResponseApi>() {
                     @Override
@@ -196,14 +186,10 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Toast.makeText(context, "Se actualizo correctamente el inmueble", Toast.LENGTH_SHORT).show();
                             mCrearInmueble.postValue("");
-                        } else if (response.code() == 401) {
-                            Intent intent = new Intent(context, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                        } else {
+                        } else if (response.code() != 401) {
                             Log.d("SALIDA onResponse", response.message());
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
-                        }
+                        }           
                     }
 
                     @Override
@@ -221,7 +207,7 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
 
     public void getInmueble(){
         if(idInmueble != 0){
-            Call<InmuebleIdApi> inmuebleIdApiCall = ApiClient.getApiInmobiliaria().getInmuebleId(ApiClient.getToken(context).getTokenHeader(), Integer.toString(idInmueble));
+            Call<InmuebleIdApi> inmuebleIdApiCall = ApiClient.getApiInmobiliaria(context).getInmuebleId(ApiClient.getToken(context).getTokenHeader(), Integer.toString(idInmueble));
 
             inmuebleIdApiCall.enqueue(new Callback<InmuebleIdApi>() {
                 @Override
@@ -230,13 +216,7 @@ public class AgregarInmuebleFragmentViewModel extends AndroidViewModel {
                     if(response.isSuccessful() && responseApi != null){
                         mGetInmueble.postValue(responseApi.getData());
                     }
-                    else if(response.code() == 401){
-                        Intent intent = new Intent(context, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    }
-                    else{
-                        Log.d("SALIDA onResponse", response.message());
+                    else if(response.code() != 401){
                         Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     }
                 }

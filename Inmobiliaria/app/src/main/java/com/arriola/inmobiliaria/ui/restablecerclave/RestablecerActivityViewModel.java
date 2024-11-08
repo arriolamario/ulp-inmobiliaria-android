@@ -27,7 +27,7 @@ public class RestablecerActivityViewModel extends AndroidViewModel {
 
     public void cambiarClave(String token, String clave){
         Gson gson = new Gson();
-        Call< ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria().cambiarClave("Bearer " + token, gson.toJson(clave));
+        Call< ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria(context).cambiarClave("Bearer " + token, gson.toJson(clave));
         responseApiCall.enqueue(new Callback<ResponseApi>() {
             @Override
             public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
@@ -37,10 +37,8 @@ public class RestablecerActivityViewModel extends AndroidViewModel {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
-                else if(response.code() == 401){
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                else if(response.code() != 401){
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
 

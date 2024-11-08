@@ -1,5 +1,6 @@
 package com.arriola.inmobiliaria.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(bind.getRoot());
         vm = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainActivityViewModel.class);
 
+
+
         bind.ivLogoLogin.setImageResource(R.drawable.icono_inmobiliaria);
         bind.btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
                 vm.EnviarMail(bind.etUsuarioLogin.getText().toString());
             }
         });
+        Intent intent = getIntent();
+        vm.mensaje(intent);
+        vm.UsuarioLogeado();
 
     }
 }

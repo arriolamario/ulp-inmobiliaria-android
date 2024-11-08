@@ -22,8 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.arriola.inmobiliaria.R;
+import com.arriola.inmobiliaria.Util;
 import com.arriola.inmobiliaria.databinding.FragmentAgregarInmuebleBinding;
 import com.arriola.inmobiliaria.databinding.FragmentInmueblesBinding;
 import com.arriola.inmobiliaria.model.inmueble.Inmueble;
@@ -85,7 +87,13 @@ public class AgregarInmuebleFragment extends Fragment {
         vm.getmBitmap().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
             @Override
             public void onChanged(Bitmap bitmap) {
-                bind.ivfotoAgregarInmueble.setImageBitmap(bitmap);
+                try{
+                    bind.ivfotoAgregarInmueble.setImageBitmap(bitmap);
+                }
+                catch (Exception ex){
+                    Toast.makeText(getContext(), "Error al cargar", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         vm.getmCrearInmueble().observe(getViewLifecycleOwner(), new Observer() {
@@ -129,11 +137,7 @@ public class AgregarInmuebleFragment extends Fragment {
         vm.getmGetInmueble().observe(getViewLifecycleOwner(), new Observer<Inmueble>() {
             @Override
             public void onChanged(Inmueble inmueble) {
-                Glide.with(getContext())
-                        .load(ApiClient.URLBASE + inmueble.getAvatar_Url())
-                        .placeholder(R.drawable.agente_inmobiliario)
-                        .error(R.drawable.agente_inmobiliario)
-                        .into(bind.ivfotoAgregarInmueble);
+                Util.cargarImagen(getContext(), inmueble.getAvatar_Url(), R.drawable.agente_inmobiliario, bind.ivfotoAgregarInmueble);
 
                 bind.etDireccionAgregarInmueble.setText(inmueble.getDireccion());
                 bind.etAmbientesAgregarInmueble.setText(Integer.toString(inmueble.getAmbientes()));

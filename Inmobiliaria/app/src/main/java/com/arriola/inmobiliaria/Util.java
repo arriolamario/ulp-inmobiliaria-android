@@ -7,6 +7,10 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
+
+import com.arriola.inmobiliaria.request.ApiClient;
+import com.bumptech.glide.Glide;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,8 +18,23 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Util {
+
+    public static void cargarImagen(Context context, String url, int idResource, ImageView ivImagen){
+        LocalDateTime fechaActual = LocalDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String fechaFormateada = fechaActual.format(formato);
+        Glide.with(context)
+                .load(ApiClient.URLBASE + url + "?fecha="+ fechaFormateada)
+                .placeholder(R.drawable.cargando)
+                .error(idResource)
+                .into(ivImagen);
+    }
+
     public static Bitmap redimensionarImagenDesdeUri(Context context, Uri uri, int nuevoAncho) {
         try {
             //Obtenemos el bitmap desde la URI

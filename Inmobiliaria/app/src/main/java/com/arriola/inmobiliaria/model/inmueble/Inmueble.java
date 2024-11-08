@@ -11,6 +11,8 @@ public class Inmueble {
     private float precio;
     private int ambientes;
     private boolean activo;
+    private int idInquilino;
+    private int idContrato;
 
     public Inmueble() {
     }
@@ -95,5 +97,21 @@ public class Inmueble {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public int getIdInquilino() {
+        return idInquilino;
+    }
+
+    public void setIdInquilino(int idInquilino) {
+        this.idInquilino = idInquilino;
+    }
+
+    public int getIdContrato() {
+        return idContrato;
+    }
+
+    public void setIdContrato(int idContrato) {
+        this.idContrato = idContrato;
     }
 }

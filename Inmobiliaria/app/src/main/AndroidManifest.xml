@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Inmobiliaria"
         android:usesCleartextTraffic="true">
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAD4WjRHvWe0rsAESY0sDZ8pdxvTek_V3I" />
         <activity
             android:name=".ui.restablecerclave.RestablecerActivity"
             android:exported="true">

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.arriola.inmobiliaria.R;
 import com.arriola.inmobiliaria.databinding.FragmentInmueblesBinding;
 import com.arriola.inmobiliaria.model.inmueble.Inmueble;
+import com.arriola.inmobiliaria.ui.menu.adapter.InmuebleAdpter;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class InmueblesFragment extends Fragment {
         vm.getMlInmueble().observe(getViewLifecycleOwner(), new Observer<List<Inmueble>>() {
             @Override
             public void onChanged(List<Inmueble> inmuebles) {
-                InmuebleAdpter adapter = new InmuebleAdpter(inmuebles);
+                InmuebleAdpter adapter = new InmuebleAdpter(inmuebles, InmuebleAdpter.INMUEBLE_DETALLE);
 
                 bind.rvInmueblesList.setAdapter(adapter);
             }

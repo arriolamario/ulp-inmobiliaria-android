@@ -1,64 +1,53 @@
-package com.arriola.inmobiliaria;
+package com.arriola.inmobiliaria.ui.menu.ui.inquilino;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DetalleInquilinoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.arriola.inmobiliaria.R;
+import com.arriola.inmobiliaria.databinding.FragmentDetalleInquilinoBinding;
+import com.arriola.inmobiliaria.databinding.FragmentInmueblesBinding;
+import com.arriola.inmobiliaria.model.inquilino.Inquilino;
+import com.arriola.inmobiliaria.ui.menu.ui.inmueble.InmueblesFragmentViewModel;
+
 public class DetalleInquilinoFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public DetalleInquilinoFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DetalleInquilinoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetalleInquilinoFragment newInstance(String param1, String param2) {
-        DetalleInquilinoFragment fragment = new DetalleInquilinoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    public static final String IDINQUILINO = "IDINQUILINO";
+    private FragmentDetalleInquilinoBinding bind;
+    private DetalleInquilinoFragmentViewModel vm;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detalle_inquilino, container, false);
+        bind = FragmentDetalleInquilinoBinding.inflate(inflater, container, false);
+        vm = new ViewModelProvider(this).get(DetalleInquilinoFragmentViewModel.class);
+
+        int idInquilino = getArguments().getInt(IDINQUILINO);
+
+
+        vm.getmInquilino().observe(getViewLifecycleOwner(), new Observer<Inquilino>() {
+            @Override
+            public void onChanged(Inquilino inquilino) {
+                bind.etApellidoInquilino.setText(inquilino.getApellido());
+                bind.etDireccionInquilino.setText(inquilino.getDireccion());
+                bind.etDniInquilino.setText(inquilino.getDni());
+                bind.etEmailInquilino.setText(inquilino.getEmail());
+                bind.etTelefonoInquilino.setText(inquilino.getTelefonoArea() + " - " + inquilino.getTelefonoNumero());
+                bind.etNombreInquilino.setText(inquilino.getNombre());
+            }
+        });
+
+        vm.getInquilino(idInquilino);
+        return bind.getRoot();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bind = null;
     }
 }

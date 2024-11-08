@@ -37,7 +37,7 @@ public class InmueblesFragmentViewModel extends AndroidViewModel {
     }
 
     public void GetInmuebles(){
-        Call<InmuebleApi> inmuebleApiCall = ApiClient.getApiInmobiliaria().inmuebles(ApiClient.getToken(context).getTokenHeader());
+        Call<InmuebleApi> inmuebleApiCall = ApiClient.getApiInmobiliaria(context).inmuebles(ApiClient.getToken(context).getTokenHeader());
         
         inmuebleApiCall.enqueue(new Callback<InmuebleApi>() {
             @Override
@@ -46,13 +46,7 @@ public class InmueblesFragmentViewModel extends AndroidViewModel {
                 if(response.isSuccessful() && inmuebleApi != null){
                     mlInmueble.postValue(inmuebleApi.getData());
                 }
-                else if(response.code() == 401){
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
-                else{
-                    Log.d("SALIDA onResponse", response.message());
+                else if(response.code() != 401){
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 }
             }

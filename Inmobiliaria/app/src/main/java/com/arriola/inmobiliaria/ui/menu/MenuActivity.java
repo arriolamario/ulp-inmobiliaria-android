@@ -1,17 +1,22 @@
 package com.arriola.inmobiliaria.ui.menu;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arriola.inmobiliaria.R;
+import com.arriola.inmobiliaria.Util;
 import com.arriola.inmobiliaria.model.Propietario;
 import com.arriola.inmobiliaria.model.Token;
 import com.arriola.inmobiliaria.request.ApiClient;
+import com.arriola.inmobiliaria.ui.login.MainActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -74,11 +79,7 @@ public class MenuActivity extends AppCompatActivity {
                 nombreCompleto.setText(token.getUsuario().getNombre() + " " + token.getUsuario().getApellido());
                 email.setText(token.getUsuario().getEmail());
                 Log.d("SALIDA URL", token.getUsuario().getAvatar_Url());
-                Glide.with(getApplicationContext())
-                        .load(ApiClient.URLBASE + token.getUsuario().getAvatar_Url())
-                        .placeholder(R.mipmap.ic_launcher_round)
-                        .error(R.mipmap.ic_launcher_round)
-                        .into(fotoPerfil);
+                Util.cargarImagen(getApplicationContext(),token.getUsuario().getAvatar_Url(), R.mipmap.ic_launcher_round, fotoPerfil);
             }
         });
 
@@ -89,6 +90,22 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem itemSalir = menu.getItem(0);
+
+        itemSalir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+
+                ApiClient.Borrar(getApplicationContext());
+                //Toast.makeText(context, "Sesión Expirada!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("FLAGSESSION", false);
+                getApplicationContext().startActivity(intent);
+
+                return true;
+            }
+        });
         return true;
     }
 

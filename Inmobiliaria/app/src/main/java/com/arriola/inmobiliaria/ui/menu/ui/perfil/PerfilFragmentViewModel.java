@@ -77,7 +77,7 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
     }
 
     public void datosPropietarios(){
-        Call<Propietario> propietarioCall = ApiClient.getApiInmobiliaria().get(ApiClient.getToken(context).getTokenHeader());
+        Call<Propietario> propietarioCall = ApiClient.getApiInmobiliaria(context).get(ApiClient.getToken(context).getTokenHeader());
 
         propietarioCall.enqueue(new Callback<Propietario>() {
             @Override
@@ -86,14 +86,8 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
                 if(response.isSuccessful() && propietario != null){
                     mPropietario.setValue(propietario);
                 }
-                else if(response.code() == 401){
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
-                else{
-                    Log.d("SALIDA", response.message()) ;
-                    Toast.makeText(context, "onResponse: Error de respuesta API, GetPropietario", Toast.LENGTH_SHORT).show();
+                else if(response.code() != 401){
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -115,7 +109,7 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
             propietario.setTelefonoNumero(numero);
 
 
-            Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria().actualizar(ApiClient.getToken(context).getTokenHeader(), propietario);
+            Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria(context).actualizar(ApiClient.getToken(context).getTokenHeader(), propietario);
 
             responseApiCall.enqueue(new Callback<ResponseApi>() {
                 @Override
@@ -124,14 +118,8 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
                     if(response.isSuccessful() && responseApi != null && responseApi.getStatus().equals("exito")){
                         Toast.makeText(context, "Propietario actualizado", Toast.LENGTH_SHORT).show();
                     }
-                    else if(response.code() == 401){
-                        Intent intent = new Intent(context, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    }
-                    else{
-                        Log.d("SALIDA", "onResponse: " + response.message());
-                        Toast.makeText(context, "onResponse, Error en la respuesta, actualizar propietario", Toast.LENGTH_SHORT).show();
+                    else if(response.code() != 401){
+                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -171,7 +159,7 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
 
             // Crear MultipartBody.Part para enviarlo en el form-data
             MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", fileImagen.getName(), requestFile);
-            Call<ResponseApi> callResponse = ApiClient.getApiInmobiliaria().cambiarAvatar(ApiClient.getToken(context).getTokenHeader(), body);
+            Call<ResponseApi> callResponse = ApiClient.getApiInmobiliaria(context).cambiarAvatar(ApiClient.getToken(context).getTokenHeader(), body);
             
             callResponse.enqueue(new Callback<ResponseApi>() {
                 @Override
@@ -179,12 +167,7 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
                     if(response.isSuccessful()){
                         Toast.makeText(context, "Se cambio la imagen correctamente", Toast.LENGTH_SHORT).show();
                     }
-                    else if(response.code() == 401){
-                        Intent intent = new Intent(context, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    }
-                    else{
+                    else if(response.code() != 401){
                         Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     }
                 }

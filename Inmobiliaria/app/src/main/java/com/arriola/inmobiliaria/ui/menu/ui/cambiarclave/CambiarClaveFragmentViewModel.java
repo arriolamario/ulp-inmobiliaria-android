@@ -39,7 +39,7 @@ public class CambiarClaveFragmentViewModel extends AndroidViewModel {
     public void CambiarClave(String clave){
         Gson gson = new Gson();
 
-        Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria().cambiarClave(ApiClient.getToken(context).getTokenHeader(), gson.toJson(clave));
+        Call<ResponseApi> responseApiCall = ApiClient.getApiInmobiliaria(context).cambiarClave(ApiClient.getToken(context).getTokenHeader(), gson.toJson(clave));
 
         responseApiCall.enqueue(new Callback<ResponseApi>() {
             @Override
@@ -49,13 +49,7 @@ public class CambiarClaveFragmentViewModel extends AndroidViewModel {
                     Toast.makeText(context, "Clave cambiada correctamente", Toast.LENGTH_SHORT).show();
                     mCambiarClave.postValue(true);
                 }
-                else if(response.code() == 401){
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
-                else{
-                    Log.d("SALIDA onResponse", response.message());
+                else if(response.code() != 401){
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
