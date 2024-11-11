@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/inicioFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.inicio.InicioFragment"
-        android:label="fragment_inicio"
+        android:label="Inicio"
         tools:layout="@layout/fragment_inicio" />
     <fragment
         android:id="@+id/perfilFragment"
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/inmueblesFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.inmueble.InmueblesFragment"
-        android:label="fragment_inmuebles"
+        android:label="Inmuebles"
         tools:layout="@layout/fragment_inmuebles" >
         <action
             android:id="@+id/action_inmueblesFragment_to_agregarInmuebleFragment"
@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/inquilinosFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.inquilino.InquilinosFragment"
-        android:label="fragment_inquilinos"
+        android:label="Inquilinos"
         tools:layout="@layout/fragment_inquilinos" >
         <action
             android:id="@+id/action_inquilinosFragment_to_detalleInquilinoFragment"
@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/contratoFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.contrato.ContratoFragment"
-        android:label="fragment_contrato"
+        android:label="Contratos"
         tools:layout="@layout/fragment_contrato" >
         <action
             android:id="@+id/action_contratoFragment_to_detalleContratoFragment"
@@ -48,7 +48,7 @@
     <fragment
         android:id="@+id/cambiarClaveFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.cambiarclave.CambiarClaveFragment"
-        android:label="fragment_cambiar_clave"
+        android:label="Cambiar Clave"
         tools:layout="@layout/fragment_cambiar_clave" >
         <action
             android:id="@+id/action_cambiarClaveFragment_to_perfilFragment"
@@ -57,7 +57,7 @@
     <fragment
         android:id="@+id/agregarInmuebleFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.inmueble.AgregarInmuebleFragment"
-        android:label="fragment_agregar_inmueble"
+        android:label="Inmuebles"
         tools:layout="@layout/fragment_agregar_inmueble" >
         <action
             android:id="@+id/action_agregarInmuebleFragment_to_inmueblesFragment"
@@ -66,7 +66,7 @@
     <fragment
         android:id="@+id/detalleInquilinoFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.inquilino.DetalleInquilinoFragment"
-        android:label="fragment_detalle_inquilino"
+        android:label="Inquilino Detalle"
         tools:layout="@layout/fragment_detalle_inquilino" >
         <action
             android:id="@+id/action_detalleInquilinoFragment_to_inquilinosFragment"
@@ -75,7 +75,7 @@
     <fragment
         android:id="@+id/detalleContratoFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.contrato.DetalleContratoFragment"
-        android:label="fragment_detalle_contrato"
+        android:label="Contrato Detalle"
         tools:layout="@layout/fragment_detalle_contrato" >
         <action
             android:id="@+id/action_detalleContratoFragment_to_contratoFragment"
@@ -87,6 +87,6 @@
     <fragment
         android:id="@+id/pagosFragment"
         android:name="com.arriola.inmobiliaria.ui.menu.ui.contrato.PagosFragment"
-        android:label="fragment_pagos"
+        android:label="Pagos"
         tools:layout="@layout/fragment_pagos" />
 </navigation>

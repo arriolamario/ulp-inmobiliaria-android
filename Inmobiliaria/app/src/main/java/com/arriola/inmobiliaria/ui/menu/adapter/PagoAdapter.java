@@ -50,10 +50,10 @@ public class PagoAdapter extends RecyclerView.Adapter<PagoAdapter.PagoViewHolder
         public void bind(Pago pago) {
             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-            bind.etNumeroPago.setText(pago.getNumeroPago()+"");
-            bind.etFechaPago.setText(formato.format(pago.getFechaPago()));
-            bind.etMontoPago.setText(pago.getImporte()+"");
-            bind.etDetallePago.setText(pago.getDetalle());
+            bind.tvNumeroPagoValor.setText(pago.getNumeroPago()+"");
+            bind.tvFechaPagoValor.setText(formato.format(pago.getFechaPago()));
+            bind.tvImportePagoValor.setText("$"+pago.getImporte());
+            bind.tvDetalleValor.setText(pago.getDetalle());
         }
     }
 }

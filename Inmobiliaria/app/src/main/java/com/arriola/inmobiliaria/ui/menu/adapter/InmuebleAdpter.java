@@ -59,8 +59,8 @@ public class InmuebleAdpter extends RecyclerView.Adapter<InmuebleAdpter.Inmueble
         }
 
         public void bind(Inmueble inmueble){
-            bind.tvDireccion.setText(inmueble.getDireccion());
-            bind.tvPrecio.setText("$"+inmueble.getPrecio());
+            bind.tvDireccionItemValor.setText(inmueble.getDireccion());
+            bind.tvImporteItemValor.setText("$"+inmueble.getPrecio());
 
             Util.cargarImagen(bind.getRoot().getContext(), inmueble.getAvatar_Url(), R.drawable.agente_inmobiliario, bind.ivInmueble);
 

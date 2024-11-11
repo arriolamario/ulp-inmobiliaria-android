@@ -87,7 +87,6 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
                     mPropietario.setValue(propietario);
                 }
                 else if(response.code() != 401){
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -119,7 +118,6 @@ public class PerfilFragmentViewModel extends AndroidViewModel {
                         Toast.makeText(context, "Propietario actualizado", Toast.LENGTH_SHORT).show();
                     }
                     else if(response.code() != 401){
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     }
                 }
 
